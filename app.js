@@ -159,11 +159,11 @@ function populateEpisodes(episodes) {
 		if (episode.season !== null && episode.number !== null) itemHtml += ', ';
 		if (episode.number !== null) itemHtml += `episode ${episode.number}`;
 		if (episode.season !== null || episode.number !== null) itemHtml += '</p>';
-		itemHtml += '<div class="d-flex justify-content-center">';
+		itemHtml += '<div class="d-block d-lg-flex justify-content-center">';
 		if (episode.image !== defaultImage)
 			itemHtml += `<img src="${episode.image}" 
 		class="img-thumbnail me-3" style="height: 200px"></img>`;
-		if (episode.summary !== null) itemHtml += `${episode.summary}`;
+		if (episode.summary !== null) itemHtml += `<p>${episode.summary}</p>`;
 		itemHtml += '</div>';
 		if (episode !== episodes[episodes.length - 1]) itemHtml += '<hr>';
 
