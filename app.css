@@ -2,6 +2,6 @@ body{
   background-color: snow;
 }
 
-ul {
+li.episode {
   list-style-type: none;
 }

@@ -2,6 +2,37 @@
 ------------------------------ SETTINGS -----------------------------
 ****************************************************************** */
 const defaultImage = 'https://tinyurl.com/tv-missing';
+const randomShows = [
+	'CSI',
+	"Queen's Gambit",
+	'Criminal',
+	'Game of Thrones',
+	'Downton Abbey',
+	'Mad Men',
+	'Rick and Morty',
+	"Bob's Burgers",
+	'Haunting of Hill House',
+	'Forensic Files',
+	'Law & Order',
+	'Bones',
+	'Bodyguard',
+	'The Crown',
+	'Pokémon',
+	'X-Files',
+	'Battlestar Galactica',
+	'Evil',
+	'Real Housewives',
+	'Attack on Titan',
+	'Golden Girls',
+	'Rachel Maddow',
+	'Big Little Lies'
+];
+const welcomeInstructions = [
+	'In the navigation bar, enter the name of a TV show',
+	'Click the Search TV Show button',
+	'A list of TV shows matching the search terms will be generated',
+	'Click the Episode List button for a TV show to see a list of all episodes for that show'
+];
 
 /********************************************************************
 --------------------------- searchShows() ---------------------------
@@ -128,11 +159,13 @@ function populateEpisodes(episodes) {
 		if (episode.season !== null && episode.number !== null) itemHtml += ', ';
 		if (episode.number !== null) itemHtml += `episode ${episode.number}`;
 		if (episode.season !== null || episode.number !== null) itemHtml += '</p>';
+		itemHtml+='<div class="d-flex justify-content-center">'
 		if (episode.image !== defaultImage)
 			itemHtml += `<img src="${episode.image}" 
-		class="img-thumbnail" style="height: 200px"></img>`;
+		class="img-thumbnail me-3" style="height: 200px"></img>`;
 		if (episode.summary !== null) itemHtml += `${episode.summary}`;
-		if (episode!== episodes[episodes.length-1]) itemHtml+='<hr>'
+		itemHtml+='</div>'
+		if (episode !== episodes[episodes.length - 1]) itemHtml += '<hr>';
 
 		const $item = `<li class="episode">${itemHtml}</li>`;
 
@@ -164,7 +197,9 @@ async function searchInput(inputId) {
 	let query = $(`#${inputId}`).val();
 	if (!query) return;
 
-	$('#episodes-area').hide();
+	// delete instructions area when first search occurs
+	$('#instructions-area').hide();
+	document.querySelector('#instructions-area').innerHTML='';
 
 	let shows = await searchShows(query);
 	populateShows(shows);
@@ -182,34 +217,23 @@ async function searchInput(inputId) {
 
 /* RANDOM STARTING SHOW IN SEARCH
  * enter a different show on reload.     */
-const randomShows = [
-	'CSI',
-	"Queen's Gambit",
-	'Criminal',
-	'Game of Thrones',
-	'Downton Abbey',
-	'Mad Men',
-	'Rick and Morty',
-	"Bob's Burgers",
-	'Haunting of Hill House',
-	'Forensic Files',
-	'Law & Order',
-	'Bones',
-	'Bodyguard',
-	'The Crown',
-	'Pokémon',
-	'X-Files',
-	'Battlestar Galactica',
-	'Evil',
-	'Real Housewives',
-	'Attack on Titan',
-	'Golden Girls',
-	'Rachel Maddow',
-	'Big Little Lies'
-];
-function getRandomShow(shows) {
+
+ function getRandomShow(shows) {
 	randomNum = Math.floor(Math.random() * shows.length);
 	return shows[randomNum];
 }
 // $('#search-query').val(getRandomShow(randomShows));
 $('#navbarSearchQuery').val(getRandomShow(randomShows));
+
+
+/* GENERATE INSTRUCTIONS
+ * space is hidden when a search is made     */
+
+ function populateInstructions(instructions,ulId){
+	const $ulArea=$(`#${ulId}`)	
+	for (let instruction of instructions){
+		let $item=$(`<li>${instruction}</li>`)
+		$ulArea.append($item)
+	}
+ }
+ populateInstructions(welcomeInstructions,'instructions-list')
