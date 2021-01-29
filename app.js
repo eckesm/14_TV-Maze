@@ -10,7 +10,7 @@ const defaultImage='https://tinyurl.com/tv-missing'
 
 async function searchShows(q) {
 	// send GET request with show seach parameters to API and await show data in response
-	const res = await axios.get('http://api.tvmaze.com/search/shows', { params: { q } });
+	const res = await axios.get('https://api.tvmaze.com/search/shows', { params: { q } });
 
 	// reduce results of API request to an array of objects containing show data.
 	return res.data.reduce(function(showsArr, nextShow) {
@@ -71,7 +71,7 @@ function populateShows(shows) {
 
 async function getEpisodes(id) {
 	// send GET request with show id parameters to API and await episode data in response
-	const res = await axios.get(`http://api.tvmaze.com/shows/${id}/episodes`);
+	const res = await axios.get(`https://api.tvmaze.com/shows/${id}/episodes`);
 
 	// reduce results of API request to an array of objects containing episode data and pass array to populateEpisodes()
 	populateEpisodes(
