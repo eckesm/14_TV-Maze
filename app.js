@@ -174,3 +174,8 @@ function getRandomShow(shows) {
 	return shows[randomNum];
 }
 $('#search-query').val(getRandomShow(randomShows));
+
+// SCRIPT FOR MODALS
+$('#myModal').on('shown.bs.modal', function () {
+  $('#myInput').trigger('focus')
+})
