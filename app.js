@@ -1,3 +1,6 @@
+//DEFAULT
+const defaultImage='https://tinyurl.com/tv-missing'
+
 /********************************************************************
 --------------------------- searchShows() ---------------------------
 *********************************************************************
@@ -13,7 +16,7 @@ async function searchShows(q) {
 	return res.data.reduce(function(showsArr, nextShow) {
 		let imageUrl;
 		nextShow.show.image === null
-			? (imageUrl = 'https://tinyurl.com/tv-missing')
+			? (imageUrl = defaultImage)
 			: (imageUrl = nextShow.show.image.original);
 
 		showsArr.push({
@@ -21,7 +24,7 @@ async function searchShows(q) {
 			name    : nextShow.show.name,
 			summary : nextShow.show.summary,
 			image   : imageUrl
-    });
+		});
 		return showsArr;
 	}, []);
 }
@@ -73,14 +76,20 @@ async function getEpisodes(id) {
 	// reduce results of API request to an array of objects containing episode data and pass array to populateEpisodes()
 	populateEpisodes(
 		res.data.reduce(function(episodesArr, nextEpisode) {
+			let imageUrl;
+			nextEpisode.image === null
+				? (imageUrl = defaultImage)
+				: (imageUrl = nextEpisode.image.original);
+
 			episodesArr.push({
 				id          : nextEpisode.id,
 				name        : nextEpisode.name,
 				summary     : nextEpisode.summary,
 				season      : nextEpisode.season,
 				number      : nextEpisode.number,
-				episodesUrl : nextEpisode.url
-      });
+				episodesUrl : nextEpisode.url,
+				image       : imageUrl
+			});
 			return episodesArr;
 		}, [])
 	);
@@ -95,28 +104,39 @@ async function getEpisodes(id) {
 
 function populateEpisodes(episodes) {
 	// show episodes area
-	const $episodesArea = $('#episodes-area');
-	$episodesArea.show();
+	// const $episodesArea = $('#episodes-area');
+	// $episodesArea.show();
 
 	// empty episodes list of any existing information
 	const $episodesList = $('#episodes-list');
-	$episodesList.empty();
+	// $episodesList.empty();
+
+	// modal
+	const $episodesModalList = $('#episodesModal-list');
+	$episodesModalList.empty();
 
 	// create a new li for each show object in array
 	for (let episode of episodes) {
-		let itemHtml = `<b>${episode.name}</b>`;
+		let itemHtml =`<b class="display-5">${episode.name}</b><br>`;
 
 		// build li content based on what information is available in episode object
-		if (episode.season !== null || episode.number !== null) itemHtml += ' (';
+		if (episode.season !== null || episode.number !== null) itemHtml += '<p class="fst-italic">';
 		if (episode.season !== null) itemHtml += `season ${episode.season}`;
 		if (episode.season !== null && episode.number !== null) itemHtml += ', ';
 		if (episode.number !== null) itemHtml += `episode ${episode.number}`;
-		if (episode.season !== null || episode.number !== null) itemHtml += ')';
-		if (episode.summary !== null) itemHtml += `: ${episode.summary}`;
+		if (episode.season !== null || episode.number !== null) itemHtml += '</p>';
+		if (episode.image !== defaultImage) itemHtml+= `<img src="${episode.image}" 
+		class="img-thumbnail" alt="..."></img>`
+		if (episode.summary !== null) itemHtml += `${episode.summary}`;
+		
+		
 		const $item = `<li class="episode">${itemHtml}</li>`;
 
 		// append new li to episodes list
-		$episodesList.append($item);
+		// $episodesList.append($item);
+
+		// append new li to episodes modal
+		$episodesModalList.append($item);
 	}
 }
 
@@ -141,6 +161,9 @@ $('#search-form').on('submit', async function handleSearch(evt) {
 	$('.episodebutton').click(function(evt) {
 		const showId = evt.target.parentElement.getAttribute('data-show-id');
 		getEpisodes(showId);
+
+		// show episodes modal
+		$('#episodesModal').modal('show');
 	});
 });
 
@@ -167,15 +190,11 @@ const randomShows = [
 	'Evil',
 	'Real Housewives',
 	'Attack on Titan',
-	'Golden Girls'
+	'Golden Girls',
+	'Rachel Maddow'
 ];
 function getRandomShow(shows) {
 	randomNum = Math.floor(Math.random() * shows.length);
 	return shows[randomNum];
 }
 $('#search-query').val(getRandomShow(randomShows));
-
-// SCRIPT FOR MODALS
-$('#myModal').on('shown.bs.modal', function () {
-  $('#myInput').trigger('focus')
-})
