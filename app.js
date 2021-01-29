@@ -44,12 +44,12 @@ function populateShows(shows) {
 			`<div class="col-md-6 col-lg-3 mb-5 show" data-show-id="${show.id}">
          <div class="card" data-show-id="${show.id}">
            <img class="card-img-top" src="${show.image}">
-           <div class="card-body">
+           <div class="card-body border">
              <h5 class="card-title">${show.name}</h5>
              <p class="card-text">${show.summary}</p>
            </div>
-         </div>
-         <button class="btn btn-info episodebutton">Episode Info</button>
+					 <button class="btn btn-info episodebutton">Episode Info</button>
+				 </div>
        </div>
       `
 		);
