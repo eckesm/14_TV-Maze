@@ -21,7 +21,7 @@ async function searchShows(q) {
 			name    : nextShow.show.name,
 			summary : nextShow.show.summary,
 			image   : imageUrl
-		});
+    });
 		return showsArr;
 	}, []);
 }
@@ -80,7 +80,7 @@ async function getEpisodes(id) {
 				season      : nextEpisode.season,
 				number      : nextEpisode.number,
 				episodesUrl : nextEpisode.url
-			});
+      });
 			return episodesArr;
 		}, [])
 	);
@@ -163,7 +163,11 @@ const randomShows = [
 	'The Crown',
 	'Pokémon',
 	'X-Files',
-	'Battlestar Galactica'
+	'Battlestar Galactica',
+	'Evil',
+	'Real Housewives',
+	'Attack on Titan',
+	'Golden Girls'
 ];
 function getRandomShow(shows) {
 	randomNum = Math.floor(Math.random() * shows.length);
