@@ -1,4 +1,6 @@
-//DEFAULT
+/********************************************************************
+------------------------------ SETTINGS -----------------------------
+****************************************************************** */
 const defaultImage = 'https://tinyurl.com/tv-missing';
 
 /********************************************************************
@@ -45,11 +47,12 @@ function populateShows(shows) {
 			`<div class="col-md-6 col-lg-3 mb-5 show" data-show-id="${show.id}" data-show-name="${show.name}">
          <div class="card" data-show-id="${show.id}" data-show-name="${show.name}">
            <img class="card-img-top" src="${show.image}">
-           <div class="card-body border">
+					 <button class="btn btn-outline-dark episodebutton">Episode List</button>
+					 <div class="card-body border">
              <h5 class="card-title">${show.name}</h5>
              <p class="card-text">${show.summary}</p>
            </div>
-					 <button class="btn btn-info episodebutton">Episode Info</button>
+					 
 				 </div>
        </div>
       `
@@ -101,19 +104,19 @@ async function getEpisodes(showId, showName) {
 
 function populateEpisodes(episodes) {
 	// show episodes area
-	// const $episodesArea = $('#episodes-area');
-	// $episodesArea.show();
+	const $episodesArea = $('#episodes-area');
+	$episodesArea.show();
 
 	// empty episodes list of any existing information
 	const $episodesList = $('#episodes-list');
-	// $episodesList.empty();
+	$episodesList.empty();
 
 	// modal
 	const $episodesModalList = $('#episodesModalList');
 	$episodesModalList.empty();
 
 	let $episodesModalTitle = $('#episodesModalTitle');
-	$episodesModalTitle.text(episodes[0].show)
+	$episodesModalTitle.text(episodes[0].show);
 
 	// create a new li for each show object in array
 	for (let episode of episodes) {
@@ -127,13 +130,14 @@ function populateEpisodes(episodes) {
 		if (episode.season !== null || episode.number !== null) itemHtml += '</p>';
 		if (episode.image !== defaultImage)
 			itemHtml += `<img src="${episode.image}" 
-		class="img-thumbnail" alt="..."></img>`;
+		class="img-thumbnail" style="height: 200px"></img>`;
 		if (episode.summary !== null) itemHtml += `${episode.summary}`;
+		if (episode!== episodes[episodes.length-1]) itemHtml+='<hr>'
 
 		const $item = `<li class="episode">${itemHtml}</li>`;
 
 		// append new li to episodes list
-		// $episodesList.append($item);
+		$episodesList.append($item);
 
 		// append new li to episodes modal
 		$episodesModalList.append($item);
@@ -200,11 +204,12 @@ const randomShows = [
 	'Real Housewives',
 	'Attack on Titan',
 	'Golden Girls',
-	'Rachel Maddow'
+	'Rachel Maddow',
+	'Big Little Lies'
 ];
 function getRandomShow(shows) {
 	randomNum = Math.floor(Math.random() * shows.length);
 	return shows[randomNum];
 }
-$('#search-query').val(getRandomShow(randomShows));
+// $('#search-query').val(getRandomShow(randomShows));
 $('#navbarSearchQuery').val(getRandomShow(randomShows));
