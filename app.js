@@ -25,10 +25,13 @@ const randomShows = [
 	'Attack on Titan',
 	'Golden Girls',
 	'Rachel Maddow',
-	'Big Little Lies'
+	'Big Little Lies',
+	'Survivor',
+	"RuPaul's Drag Race",
+	'Fargo'
 ];
 const welcomeInstructions = [
-	'In the navigation bar, enter the name of a TV show',
+	'In the search box, enter the name of a TV show',
 	'Click the Search TV Show button',
 	'A list of TV shows matching the search terms will be generated',
 	'Click the Episode List button for a TV show to see a list of all episodes for that show'
@@ -38,8 +41,8 @@ const welcomeInstructions = [
 --------------------------- searchShows() ---------------------------
 *********************************************************************
 
- * DESCRIPTION:
- * given a search criteria, creates an array of show objects based on API responses.     */
+DESCRIPTION:
+ --> given a search criteria, creates an array of show objects based on API responses.     */
 
 async function searchShows(q) {
 	// send GET request with show seach parameters to API and await show data in response
@@ -64,8 +67,8 @@ async function searchShows(q) {
 ------------------------- populateShows() ---------------------------
 *********************************************************************
 
- * DESCRIPTION:
- * given an array of show objects from searchShows(), populates the DOM with a card for each show object.     */
+DESCRIPTION:
+ --> given an array of show objects from searchShows(), populates the DOM with a card for each show object.     */
 
 function populateShows(shows) {
 	// clear any existing content in shows list div
@@ -95,11 +98,11 @@ function populateShows(shows) {
 }
 
 /*******************************************************************
- -------------------------- getEpisodes() ---------------------------
- ********************************************************************
+--------------------------- getEpisodes() ---------------------------
+*********************************************************************
 
- * DESCRIPTION:
- * given a show id, returns an array of episodes of that show.     */
+DESCRIPTION:
+ --> given a show id, returns an array of episodes of that show.     */
 
 async function getEpisodes(showId, showName) {
 	// send GET request with show id parameters to API and await episode data in response
@@ -127,11 +130,11 @@ async function getEpisodes(showId, showName) {
 }
 
 /********************************************************************
- ------------------------- populateEpisodes() -----------------------
- ********************************************************************
+-------------------------- populateEpisodes() -----------------------
+*********************************************************************
 
- * DESCRIPTION:
- * --> creates a list of episode information from an array of episode objects.     */
+DESCRIPTION:
+ --> creates a list of episode information from an array of episode objects.     */
 
 function populateEpisodes(episodes) {
 	// show episodes area
@@ -177,21 +180,15 @@ function populateEpisodes(episodes) {
 	}
 }
 
-/********************************************************************
----------------------------- When DOM Loads -------------------------
-********************************************************************/
+/********************************************************************    
+----------------------------- searchInput() -------------------------
+*********************************************************************
 
-/* ADD EVENT LISTENERS TO BUTTONS
- * hide episodes area, get list of matching shows and show in shows list.     */
-$('#search-form').on('submit', function(evt) {
-	evt.preventDefault();
-	searchInput('search-query');
-});
-
-$('#navbarForm').on('submit', function(evt) {
-	evt.preventDefault();
-	searchInput('navbarSearchQuery');
-});
+DESCRIPTION:
+ --> when search button is licked, uses input to generate cards for search results
+ --> removes instructions from top of page
+ --> hides episodes area so previous results are not visible
+ --> adds event listeners so episode information can be displayed     */
 
 async function searchInput(inputId) {
 	let query = $(`#${inputId}`).val();
@@ -217,19 +214,31 @@ async function searchInput(inputId) {
 	});
 }
 
-/* RANDOM STARTING SHOW IN SEARCH
- * enter a different show on reload.     */
+/******************************************************************** ---------------------------- When DOM Loads -------------------------
+********************************************************************/
 
+/* ADD EVENT LISTENERS TO BUTTONS
+ --> hide episodes area, get list of matching shows and show in shows list.     */
+$('#bodyForm').on('submit', function(evt) {
+	evt.preventDefault();
+	searchInput('bodySearchQuery');
+});
+
+$('#navbarForm').on('submit', function(evt) {
+	evt.preventDefault();
+	searchInput('navbarSearchQuery');
+});
+
+/* RANDOM STARTING SHOW IN INPUTS with getRandomShow()
+ --> enter a random show from array of shows on reload     */
 function getRandomShow(shows) {
 	randomNum = Math.floor(Math.random() * shows.length);
 	return shows[randomNum];
 }
-// $('#search-query').val(getRandomShow(randomShows));
-$('#navbarSearchQuery').val(getRandomShow(randomShows));
+$('.showSearchInput').val(getRandomShow(randomShows));
 
-/* GENERATE INSTRUCTIONS
- * space is hidden when a search is made     */
-
+/* GENERATE INSTRUCTIONS with populateInstructions()
+ --> space is hidden when a search is made     */
 function populateInstructions(instructions, ulId) {
 	const $ulArea = $(`#${ulId}`);
 	for (let instruction of instructions) {
@@ -238,3 +247,23 @@ function populateInstructions(instructions, ulId) {
 	}
 }
 populateInstructions(welcomeInstructions, 'instructions-list');
+
+/* SYNC INPUTS VALUES with syncInputVals()
+ --> Changes content of all inputs when one is changed
+ --> accepts the id of the input being monitored and the class given to all inputs     */
+function syncInputVals(inputId, inputClass) {
+	const searchInputs = document.querySelectorAll(`.${inputClass}`);
+	const searchInput = document.querySelector(`#${inputId}`);
+	console.log(searchInputs);
+	console.log(searchInput);
+	for (let input of searchInputs) {
+		if (input !== searchInput) input.value = searchInput.value;
+	}
+}
+// add event listeners to both inputs
+$('#navbarSearchQuery').on('change', function() {
+	syncInputVals('navbarSearchQuery', 'showSearchInput');
+});
+$('#bodySearchQuery').on('change', function() {
+	syncInputVals('bodySearchQuery', 'showSearchInput');
+});
