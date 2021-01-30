@@ -11,22 +11,24 @@
     <nav class="navbar sticky-top navbar-dark bg-dark">
       <div class="container-fluid">
         <a class="navbar-brand">Tele</a>
-        <form class="d-flex col col-sm-10 col-md-8 col-lg-6 d-none d-sm-flex" id="navbarForm">
+        <form class="d-flex col col-sm-10 col-md-8 col-lg-6 d-none d-lg-flex" id="navbarForm">
           <input class="form-control me-2 showSearchInput" id="navbarSearchQuery"type="text" placeholder="Search" aria-label="Search for Show">
           <button class="btn btn-primary col-4 col-xl-3" type="submit">Search TV Show</button>
         </form>
       </div>
     </nav>
 
-    <div class="container pt-2">
+    <div class="container pt-3">
       
       <div class="container">
-        <form class="d-block d-sm-none position-relative" id="bodyForm">
+        <form class="row align-items-center d-block d-lg-none position-relative" id="bodyForm">
           <div class="form-floating col-12 my-1">
             <input type="text" class="form-control showSearchInput" id="bodySearchQuery" placeholder="Search for Show">
             <label for="bodySearchQuery">Search for Show:</label>
           </div>
-          <button class="btn btn-primary col-8" type="submit">Search TV Show</button>
+          <div class="row justify-content-center">
+            <button class="btn btn-primary col-8" type="submit">Search TV Show</button>
+          </div>
         </form>
       </div>
   
